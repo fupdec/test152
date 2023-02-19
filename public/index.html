@@ -1,19 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
-  </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <title>
+    <%= htmlWebpackPlugin.options.title %>
+  </title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
+</head>
+
+<body>
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+        Please enable it to continue.</strong>
+  </noscript>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+
+
+  <div class="todo">
+    <p>Список задач</p>
+    <div class="todo__input">
+      <input id="input" type="text" placeholder="Введите имя задачи">
+      <div onclick="addTask()" class="btn-add">Добавить</div>
+    </div>
+    <ul id="list" class=""></ul>
+  </div>
+
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .todo {
+      margin: 50px;
+      border: 1px solid #acacac;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    .todo p {
+      padding: 20px 0;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .todo__input {
+      display: flex;
+      align-items: center;
+    }
+
+    .todo__input input {
+      border: 1px solid #bebebe;
+      border-radius: 10px;
+      width: 75%;
+      margin: 10px;
+      padding: 10px;
+    }
+
+    .btn-add {
+      width: 25%;
+      background: #69c361;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: 0.3s;
+      height: 40px;
+      margin: 10px;
+      border-radius: 10px;
+    }
+
+    .btn-add:hover {
+      background-color: #5fd354;
+    }
+
+    .todo ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    .todo ul li {
+      cursor: pointer;
+      position: relative;
+      padding: 12px 8px 12px 40px;
+      background: #f3f3f3;
+      font-size: 18px;
+      transition: 0.2s;
+      user-select: none;
+    }
+
+    .todo ul li:nth-child(odd) {
+      background: #f9f9f9;
+    }
+
+    .todo ul li:hover {
+      background: #ddd;
+    }
+  </style>
+
+  <script>
+    function updateTodo(data) {
+      localStorage.setItem('todo', JSON.stringify(data));
+    }
+
+    let todo = localStorage.getItem('todo');
+    todo = JSON.parse(todo);
+
+    if (todo.length == 0) updateTodo(['Сходить в магазин', 'Купить хлеб']);
+
+    function parseTodo() {
+      let html = ''
+      for (let i of todo) {
+        html += `<li class="todo__task">${i}</li>`;
+      }
+      document.getElementById('list').innerHTML = html;
+
+      let tasks = document.getElementsByClassName("todo__task");
+
+      for (let i = 0; i < tasks.length; ++i) {
+        tasks[i].onclick = function () {
+          todo.splice(i, 1);
+          updateTodo(todo);
+          parseTodo();
+        }
+      }
+    }
+
+    parseTodo();
+
+    function addTask() {
+      const input = document.getElementById("input");
+      let taskName = input.value;
+      todo.push(taskName);
+      updateTodo(todo);
+      parseTodo();
+      input.value = '';
+    }
+
+
+    // // Create a "close" button and append it to each list item
+    // var myNodelist = document.getElementsByTagName("LI");
+    // var i;
+    // for (i = 0; i < myNodelist.length; i++) {
+    //   var span = document.createElement("SPAN");
+    //   var txt = document.createTextNode("\u00D7");
+    //   span.className = "close";
+    //   span.appendChild(txt);
+    //   myNodelist[i].appendChild(span);
+    // }
+
+    // // Click on a close button to hide the current list item
+    // var close = document.getElementsByClassName("close");
+    // var i;
+    // for (i = 0; i < close.length; i++) {
+    //   close[i].onclick = function () {
+    //     var div = this.parentElement;
+    //     div.style.display = "none";
+    //   }
+    // }
+
+    // // Create a new list item when clicking on the "Add" button
+    // function addTask() {
+    //   var li = document.createElement("li");
+    //   var inputValue = document.getElementById("input").value;
+    //   var t = document.createTextNode(inputValue);
+    //   li.appendChild(t);
+    //   if (inputValue === '') {
+    //     alert("You must write something!");
+    //   } else {
+    //     document.getElementById("list").appendChild(li);
+    //   }
+    //   document.getElementById("input").value = "";
+
+    //   var span = document.createElement("SPAN");
+    //   var txt = document.createTextNode("\u00D7");
+    //   span.className = "close";
+    //   span.appendChild(txt);
+    //   li.appendChild(span);
+
+    //   for (i = 0; i < close.length; i++) {
+    //     close[i].onclick = function () {
+    //       var div = this.parentElement;
+    //       div.style.display = "none";
+    //     }
+    //   }
+    // }
+  </script>
+</body>
+
 </html>
