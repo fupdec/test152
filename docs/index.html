@@ -1,0 +1,119 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="/favicon.ico"><title>test152</title><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css"><script defer="defer" src="/js/chunk-vendors.289fecae.js"></script><script defer="defer" src="/js/app.6dc85431.js"></script><link href="/css/chunk-vendors.008b2ad8.css" rel="stylesheet"><link href="/css/app.d34d8bfb.css" rel="stylesheet"></head><body><noscript><strong>We're sorry but test152 doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id="app"></div><div class="todo"><div class="todo__wrap"><p>Список задач</p><div class="todo__input"><input id="input" placeholder="Введите имя задачи"><div onclick="addTask()" class="btn-add">Добавить</div></div><ul id="list" class=""></ul></div></div><style>* {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .todo {
+      margin: 20px;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .todo p {
+      padding: 20px 0;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .todo__wrap {
+      max-width: 800px;
+      width: 100%;
+      border: 1px solid #acacac;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    .todo__input {
+      display: flex;
+      align-items: center;
+    }
+
+    .todo__input input {
+      border: 1px solid #bebebe;
+      border-radius: 10px;
+      width: 75%;
+      margin: 10px;
+      padding: 10px;
+    }
+
+    .btn-add {
+      width: 25%;
+      background: #69c361;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: 0.3s;
+      height: 40px;
+      margin: 10px;
+      border-radius: 10px;
+    }
+
+    .btn-add:hover {
+      background-color: #5fd354;
+    }
+
+    .todo ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    .todo ul li {
+      cursor: pointer;
+      position: relative;
+      padding: 12px 8px 12px 40px;
+      background: #f3f3f3;
+      font-size: 18px;
+      transition: 0.2s;
+      user-select: none;
+    }
+
+    .todo ul li:nth-child(odd) {
+      background: #f9f9f9;
+    }
+
+    .todo ul li:hover {
+      background: #ddd;
+    }</style><script>function updateTodo(data) {
+      localStorage.setItem('todo', JSON.stringify(data));
+    }
+
+    let todo = localStorage.getItem('todo');
+    todo = JSON.parse(todo);
+
+    if (!todo) updateTodo([]);
+    if (todo.length == 0) updateTodo(['Сходить в магазин', 'Купить хлеб']);
+
+    function parseTodo() {
+      let html = ''
+      for (let i of todo) {
+        html += `<li class="todo__task">${i}</li>`;
+      }
+      document.getElementById('list').innerHTML = html;
+
+      let tasks = document.getElementsByClassName("todo__task");
+
+      for (let i = 0; i < tasks.length; ++i) {
+        tasks[i].onclick = function () {
+          todo.splice(i, 1);
+          updateTodo(todo);
+          parseTodo();
+        }
+      }
+    }
+
+    parseTodo();
+
+    function addTask() {
+      const input = document.getElementById("input");
+      let taskName = input.value;
+      todo.push(taskName);
+      updateTodo(todo);
+      parseTodo();
+      input.value = '';
+    }</script></body></html>
