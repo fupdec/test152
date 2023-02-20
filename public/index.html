@@ -127,8 +127,9 @@
     let todo = localStorage.getItem('todo');
     todo = JSON.parse(todo);
 
-    if (!todo) updateTodo([]);
-    if (todo.length == 0) updateTodo(['Сходить в магазин', 'Купить хлеб']);
+    if (!todo) {
+      todo = ['Сходить в магазин', 'Купить хлеб'];
+    }
 
     function parseTodo() {
       let html = ''

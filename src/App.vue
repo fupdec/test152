@@ -26,7 +26,7 @@
 export default {
 	name: 'App',
 	data: () => ({
-		rating: 5,
+		rating: 4,
 		email: '',
 		comment: '',
 		valid: false,
