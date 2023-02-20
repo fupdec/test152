@@ -55,6 +55,7 @@ export default {
 .v-application--wrap {
 	min-height: auto !important;
 }
+
 .app-wrap {
 	display: flex;
 	flex-direction: column;
